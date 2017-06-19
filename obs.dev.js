@@ -22,22 +22,22 @@ var obs = function() {
       i,
       target,
       source,
-      load = !args.length || preserve;
-    if(load || typeof prop === "object") {
-      if(!load) {
+      copy = !args.length || preserve;
+    if(copy || typeof prop === "object") {
+      if(!copy) {
         for(i in prop) {
           data[i] = prop[i];
         }
       }
-      target = load ? {} : data;
-      source = load ? data : prop;
+      target = copy ? {} : data;
+      source = copy ? data : prop;
       for(i in data) {
         val = getPropVal(source, i, preserve);
-        if(load ^ (val === void 0)) {
+        if(copy ^ (val === void 0)) {
           target[i] = val;
-        }!load && notify(i);
+        }!copy && notify(i);
       }
-      return load ? target : this;
+      return copy ? target : this;
     } else if(typeof prop === "function") {
       return(function(index) {
         observers[index] = prop;
