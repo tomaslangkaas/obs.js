@@ -48,14 +48,14 @@ data({
     return (new Date).getFullYear() - this.birthyear;
   }
 })
-var age = data('age');  // returns the computed age
+var age = data('age'); // returns the computed age
 
 // get an object copy of the data state
-var copy = data(); // copy gets assigned {'birthyear': 1987, 'age': 30}
+var copy = data();     // {'birthyear': 1987, 'age': 30}
 
 // get an object copy of the data
 // with computable properties preserved
-var copy = data(null); // copy gets assigned {'birthyear': 1987, 'age': function(){...}}
+var copy = data(null); // {'birthyear': 1987, 'age': function(){...}}
 
 // get an observable copy
 var observableCopy = obs()(data(null));
