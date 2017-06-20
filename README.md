@@ -26,6 +26,12 @@ data(function(property, value){
 });
 ```
 
+Call `data()` with no arguments to get a copy of all properties and values:
+
+```javascript
+var copy = data(); // {color: 'red'}
+```
+
 ## Code examples of all features
 
 ```javascript
