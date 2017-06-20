@@ -1,7 +1,7 @@
 # obs.js
 JavaScript observable objects everywhere
 
-`obs.js` is a tiny JavaScript library (~0.5kb) which runs almost everywhere (ES3 compliant), making it easy to use data objects with computable and observable properties.
+`obs.js` is a tiny JavaScript library (~0.5kb) which runs almost everywhere (ES3 compliant), making it easy to work with data in observable JavaScript objects with computable properties.
 
 ```javascript
 // create new observable object
@@ -19,28 +19,27 @@ var data = obs()({
   age: 56
 });
 
-// add an observer function
+// add an observer, 
+// keep a reference to its unregistration function
 var unregister = data(
   function(property, value){
     console.log(property + ' just changed to ' + value);
   }
 );
 
-// unregister the observer
-unregister();
-
-// write data
+// write some data 
+// and watch the console output of the observer
 data('age', 57);
 data('best friend', 'Bob');
+
+// unregister the observer
+unregister();
 
 // read data
 var age = data('age');
 
 // clear data
 data('age', undefined);
-
-// get a copy of the data
-var copy = data(); // copy gets assigned {'name': 'John', 'best friend': 'Bob'}
 
 // use computable properties
 data({
@@ -49,17 +48,22 @@ data({
     return (new Date).getFullYear() - this.birthyear;
   }
 })
-var age = data('age');       // returns the computed age
-var dataObject = data();     // returns copy with age computed
-var dataObject = data(null); // returns copy where age is preserved as a function
+var age = data('age');  // returns the computed age
+
+// get an object copy of the data state
+var copy = data(); // copy gets assigned {'birthyear': 1987, 'age': 30}
+
+// get an object copy of the data
+// with computable properties preserved
+var copy = data(null); // copy gets assigned {'birthyear': 1987, 'age': function(){...}}
 
 // get an observable copy
 var observableCopy = obs()(data(null));
 
-// clear all data
-data({});
-
 // refresh all registered observers
 data(data(null));
+
+// clear all data
+data({});
 ```
 
