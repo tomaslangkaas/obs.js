@@ -32,6 +32,16 @@ Call `data()` with no arguments to get a copy of all properties and values:
 var copy = data(); // {color: 'red'}
 ```
 
+## The callable nature of an observable object
+
+An observable object created by `obs()` is actually a multipurpose function, changing its functionality depending on what is input:
+* Provided with an `object`, all its properties and values are set from the input object, discarding all previously set properties, then returns itself. Objects (including arrays and functions) are assigned by reference, other values by copy. Registered observers are notified about each property change, including discarded properties.
+* Provided with a `function`, it registers this as an observer and returns a function to be used for unregistering the observer. All registered observers are called on each property change, with two arguments: `property` and `value`.
+* Provided with no argument, it returns an object with properties and values reflecting its current state. Computable properties are computed and set to the return value of the computation.
+* Provided with `null`, it returns an object with properties and values reflecting its current state. Computable properties are preserved as callable functions.
+* Provided with two arguments, it treats the first as a property to be set and the second as a value to assign to the property, then returns the value. Pass a value of `undefined` to clear a property. All observers are notified.
+* Provided with a single argument, it treats this as a property to be read and returns its value, or `undefined` if the property has been cleared or is not defined. If the value is a function, it is treated as a computable property, and the return value from calling the function is returned.
+
 ## Code examples of all features
 
 ```javascript
@@ -60,8 +70,8 @@ var unregister = data(
 
 // write some data
 // and watch the console output of the observer
-data('age', 57);
-data('best friend', 'Bob');
+data('age', 57);            // evaluates to the set value of 57
+data('best friend', 'Bob'); // evaluates to the set value of 'Bob'
 
 // unregister the observer
 unregister();
