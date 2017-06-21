@@ -15,7 +15,8 @@ Now, set and get properties easily by calling `data(property, value)` or `data(p
 
 ```javascript
 data('color', 'red');     // set property
-var color = data('color') // get property
+var color = data('color');// get property
+data('color', undefined); // clear property
 ```
 
 Add an observer by passing a function to `data()`:
@@ -55,7 +56,7 @@ data({
 });
 
 // or do both at the same time
-var data = obs()({
+var data = obs({
   name: 'John',
   age: 56
 });
@@ -64,7 +65,7 @@ var data = obs()({
 // keep a reference to its unregistration function
 var unregister = data(
   function(property, value){
-    console.log(property + ' just changed to ' + value);
+    console.log(property + ' just set to ' + value);
   }
 );
 
