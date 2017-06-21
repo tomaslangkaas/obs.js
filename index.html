@@ -1,3 +1,51 @@
-<html>
-Hello?
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+  <script src="obs.js"></script>
+  <script type="text/javascript">
+
+    var fail = [], pass = [];
+    function test(desc, actual, expected){
+      if(actual === expected){
+        pass.push(desc);
+      }else{
+        fail.push(desc);
+      }
+    }
+    setTimeout(function(){
+      document.body.innerHTML = 'Passed ' +
+      pass.length + ' of ' +
+      (pass.length + fail.length) +
+      ' tests.';
+    });
+
+    function compareObjects(r, n) {
+      var o, t = [], f = [];
+      for(o in r) t.push(o);
+      for(o in n) f.push(o);
+      t.sort(); f.sort();
+      if("" + t != "" + f) return !1;
+      for(o in r)
+        if(r[o] !== n[o]) return !1;
+      return !0
+    }
+
+  var data = obs({
+    name: 'John',
+    age: 56
+  });
+
+  test('Get name', data('name'), 'John');
+  test('Get age', data('age'), 56);
+  test('Set age', data('age', 32), data('age'));
+
+  data('name', undefined);
+  
+  test('Name cleared', data('name'), undefined);
+  test('Get object', compareObjects(data(), {age: 32}), true);
+  </script>
+</body>
 </html>

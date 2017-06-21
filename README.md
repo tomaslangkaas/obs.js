@@ -108,3 +108,7 @@ data(data(null));
 // clear all data
 data({});
 ```
+
+## Tests
+
+Tests are in the file `index.html` which can be [run online](https://tomaslangkaas.github.io/obs.js/).
