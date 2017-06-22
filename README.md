@@ -14,9 +14,9 @@ var data = obs();
 Now, set and get properties easily by calling `data(property, value)` or `data(property)`:
 
 ```javascript
-data('color', 'red');     // set property
-var color = data('color');// get property
-data('color', undefined); // clear property
+data('color', 'orange');   // set property
+var color = data('color'); // get property
+data('color', undefined);  // clear property
 ```
 
 Add an observer by passing a function to `data()`:
