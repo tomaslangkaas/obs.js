@@ -3,21 +3,21 @@ var obs = function(init) {
     observers = {},
     iter = 1;
 
-  function notify(prop, val, i) {
+  function notify(prop, msg, val, i) {
     val = getPropVal(data, prop);
     for(i in observers) {
-      observers[i] && observers[i](prop, val, obs);
+      observers[i] && observers[i].call(obs, prop, val, msg);
     }
   }
 
   function getPropVal(obj, prop, preserve) {
     return obj.hasOwnProperty(prop) ?
-      typeof obj[prop] === "function" && !preserve ? 
-        obj[prop](obs) : obj[prop] :
+      typeof obj[prop] === "function" && !preserve ?
+        obj[prop].call(obs) : obj[prop] :
       void 0;
   }
 
-  function obs(arg1, arg2) {
+  function obs(arg1, arg2, arg3) {
     var preserve = arg1 === null,
       args = arguments,
       i,
@@ -37,7 +37,7 @@ var obs = function(init) {
         if(copy ^ (arg2 === void 0)) {
           target[i] = arg2;
         }
-        !copy && notify(i);
+        !copy && notify(i, arg3);
       }
       return copy ? target : obs;
     } else if(typeof arg1 === "function") {
@@ -50,7 +50,7 @@ var obs = function(init) {
     } else {
       if(1 in args) {
         data[arg1] = arg2;
-        notify(arg1);
+        notify(arg1, arg3);
       }
       return getPropVal(data, arg1);
     }

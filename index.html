@@ -59,9 +59,9 @@
       capture += prop + ': ' + val + ', ';
     })
 
-    function observe(prop, val, instance) {
+    function observe(prop, val) {
       test('Observer', prop === 'age' && val === 67, true);
-      test('Observed instance', instance, data);
+      test('Observed instance', this, data);
     }
 
     var unsubscribe = data(observe);
