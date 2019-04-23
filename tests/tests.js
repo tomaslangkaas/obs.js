@@ -13,6 +13,7 @@ var tests = (function(){
   })
 
   .add('data is empty', function(done, equals){
+    data({});
     done(equals(data(), {}));
   })
 
@@ -94,23 +95,13 @@ var tests = (function(){
   // message passing
   // only if different
 
-// get an observable copy
-//var observableCopy = obs()(data(null));
+  // get an observable copy
+  //var observableCopy = obs()(data(null));
 
-// refresh all registered observers
-//data(data(null));
+  // refresh all registered observers
+  //data(data(null));
 
-// clear all data
-//data({});
+  // clear all data
+  //data({});
 
 })();
-
-/* run */
-
-tests.onprogress = function(progress){
-  if(!progress.running){
-    console.log(progress.name + ': Passed ' + progress.passed + ' of ' + progress.total);
-  }
-}
-
-tests.run();

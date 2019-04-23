@@ -10,70 +10,15 @@
   <script src="tests/passage.js"></script>
   <script src="tests/tests.js"></script>
   <script type="text/javascript">
-    var fail = [],
-      pass = [];
 
-    function test(desc, actual, expected) {
-      if (actual === expected) {
-        pass.push(desc);
-      } else {
-        fail.push(desc);
-      }
+  tests.onprogress = function(progress){
+    if(!progress.running){
+      document.body.innerHTML = progress.name + ': Passed ' + progress.passed + ' of ' + progress.total;
     }
-    setTimeout(function() {
-      document.body.innerHTML = 'Passed ' +
-        pass.length + ' of ' +
-        (pass.length + fail.length) +
-        ' tests.';
-    });
+  }
 
-    function compareObjects(r, n) {
-      var o, t = [],
-        f = [];
-      for (o in r) t.push(o);
-      for (o in n) f.push(o);
-      t.sort();
-      f.sort();
-      if ("" + t != "" + f) return !1;
-      for (o in r)
-        if (r[o] !== n[o]) return !1;
-      return !0
-    }
+  tests.run();
 
-    var data = obs({
-      name: 'John',
-      age: 56
-    });
-
-    test('Get name', data('name'), 'John');
-    test('Get age', data('age'), 56);
-    test('Set age', data('age', 32), data('age'));
-
-    data('name', undefined);
-
-    test('Name cleared', data('name'), undefined);
-    test('Get object', compareObjects(data(), {
-      age: 32
-    }), true);
-
-    var capture = '';
-    data(function(prop, val, instance) {
-      capture += prop + ': ' + val + ', ';
-    })
-
-    function observe(prop, val) {
-      test('Observer', prop === 'age' && val === 67, true);
-      test('Observed instance', this, data);
-    }
-
-    var unsubscribe = data(observe);
-    data('age', 67);
-    unsubscribe();
-    data('name', 'Rob');
-    data('name', 'Ted');
-    data('name', undefined);
-
-    test('Capture', capture, 'age: 67, name: Rob, name: Ted, name: undefined, ')
   </script>
 </body>
 
