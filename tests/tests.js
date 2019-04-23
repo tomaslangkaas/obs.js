@@ -1,8 +1,8 @@
-var testSuite1 = (function(){
+var tests = (function(){
 
   var data = obs();
 
-  return passage('Test suite #1')
+  return passage('obs() tests')
 
   .add('obs() is a function', function(done, equals){
     done(typeof obs === 'function');
@@ -42,9 +42,51 @@ var testSuite1 = (function(){
     done(equals(data('b'), undefined));
   })
 
-  // observer
-  // unregister
-  // this in observer
+  .add('clear all data', function(done, equals){
+    data({g: 7});
+    data({});
+    done(equals(data(), {}));
+  })
+
+  .add('observe', function(done, equals){
+    var observed = [], unregister;
+    function listen(prop, value){
+      observed.push(prop, value);
+    }
+    data({});
+    unregister = data(listen);
+    data('f', 9);
+    unregister();
+    done(equals(observed, ["f", 9]));
+  })
+
+  .add('unregister', function(done, equals){
+    var observed = [], unregister;
+    function listen(prop, value){
+      observed.push(prop, value);
+    }
+    data({});
+    data('d', 7);
+    unregister = data(listen);
+    data('d', 6);
+    data('b', 4);
+    data('d', 6);
+    unregister();
+    data('b', 2);
+    done(equals(observed, ["d", 6, "b", 4, "d", 6]));
+  })
+
+  .add('this keyword in observers', function(done, equals){
+    var that;
+    function listen(){
+      that = this;
+    }
+    unregister = data(listen);
+    data({p: 4});
+    unregister();
+    done(equals(that, data));
+  })
+
   // computable
   // this in computable
   // computable data object
@@ -61,15 +103,14 @@ var testSuite1 = (function(){
 // clear all data
 //data({});
 
-  // equals function
 })();
 
 /* run */
 
-testSuite1.onprogress = function(progress){
+tests.onprogress = function(progress){
   if(!progress.running){
     console.log(progress.name + ': Passed ' + progress.passed + ' of ' + progress.total);
   }
 }
 
-testSuite1.run();
+tests.run();
