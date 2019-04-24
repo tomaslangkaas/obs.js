@@ -1,6 +1,6 @@
 var tests = (function(){
 
-  var data = obs();
+  var data;
 
   return passage('obs() tests')
 
@@ -9,11 +9,11 @@ var tests = (function(){
   })
 
   .add('data is a function', function(done, equals){
+    data = obs();
     done(typeof data === 'function');
   })
 
   .add('data is empty', function(done, equals){
-    data({});
     done(equals(data(), {}));
   })
 
@@ -88,9 +88,27 @@ var tests = (function(){
     done(equals(that, data));
   })
 
-  // computable
-  // this in computable
-  // computable data object
+  .add('computable properties', function(done, equals){
+    data({
+      a: 15,
+      b: 3,
+      summed: function(){
+        return this('a') + this('b');
+      }
+    });
+    done(equals(data('summed'), 15 + 3));
+  })
+
+  .add('computed data copy', function(done, equals){
+    done(equals(data(), {a: 15, b: 3, summed: 15 + 3}));
+  })
+
+  .add('preserve computable properties', function(done, equals){
+    var fn = function(){return -1;}
+    data({computable: fn})
+    done(equals(data(null), {computable: fn}));
+  })
+
   // notify all observers again
   // message passing
   // only if different
@@ -98,8 +116,20 @@ var tests = (function(){
   // get an observable copy
   //var observableCopy = obs()(data(null));
 
-  // refresh all registered observers
-  //data(data(null));
+  .add('refresh observers', function(done, equals){
+    var original = {a: 4, b: 7, c: function(){return this('b');}},
+        logged = {},
+        unregister,
+        data = obs();
+    data(original);
+    unregister = data(function(prop, val){
+      logged[prop] = val;
+    });
+    data('b', 5);
+    data(data(null));
+    unregister();
+    done(equals(data(), logged));
+  })
 
   // clear all data
   //data({});
